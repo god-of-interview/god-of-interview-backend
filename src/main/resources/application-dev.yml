@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/god_of_interview_dev
+    username: root
+    password: ehrbs123123.
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # 개발에서는 자동 테이블 생성
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# 개발용 포트
+server:
+  port: 8080
+
+logging:
+  level:
+    com.capstone.godofinterview: DEBUG
