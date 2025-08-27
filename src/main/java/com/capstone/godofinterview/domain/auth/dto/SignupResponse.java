@@ -5,5 +5,5 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SignupResponse {
 
-    private String AccessToken;
+    private String accessToken;
 }
