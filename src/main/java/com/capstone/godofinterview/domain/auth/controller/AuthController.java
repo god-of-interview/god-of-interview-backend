@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capstone.godofinterview.domain.auth.dto.SignupRequest;
-import com.capstone.godofinterview.domain.auth.dto.SignupResponse;
+import com.capstone.godofinterview.domain.auth.dto.LoginResponse;
+import com.capstone.godofinterview.domain.auth.dto.request.LoginRequest;
+import com.capstone.godofinterview.domain.auth.dto.request.SignupRequest;
+import com.capstone.godofinterview.domain.auth.dto.response.SignupResponse;
 import com.capstone.godofinterview.domain.auth.service.AuthService;
 import com.capstone.godofinterview.global.response.ApiResponse;
 
@@ -28,6 +30,15 @@ public class AuthController {
             HttpStatus.CREATED,
             "회원가입이 완료되었습니다.",
             authService.signup(request)
+        );
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
+        return ApiResponse.success(
+            HttpStatus.OK,
+            "로그인이 완료되었습니다.",
+            authService.login(request)
         );
     }
 }

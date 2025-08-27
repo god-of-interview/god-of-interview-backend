@@ -1,12 +1,12 @@
 package com.capstone.godofinterview.domain.auth.service;
 
-import java.rmi.ServerException;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.capstone.godofinterview.domain.auth.dto.SignupRequest;
-import com.capstone.godofinterview.domain.auth.dto.SignupResponse;
+import com.capstone.godofinterview.domain.auth.dto.LoginResponse;
+import com.capstone.godofinterview.domain.auth.dto.request.LoginRequest;
+import com.capstone.godofinterview.domain.auth.dto.request.SignupRequest;
+import com.capstone.godofinterview.domain.auth.dto.response.SignupResponse;
 import com.capstone.godofinterview.domain.user.entity.Role;
 import com.capstone.godofinterview.domain.user.entity.User;
 import com.capstone.godofinterview.domain.user.exception.UserErrorCode;
@@ -65,6 +65,31 @@ public class AuthServiceImpl implements AuthService {
         return new SignupResponse(accessToken);
     }
 
+    @Override
+    public LoginResponse login(LoginRequest request) {
+
+        // 이메일로 유저 찾기
+        User user = userRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        // 요청한 비밀번호와 암호화된 비밀번호 비교하기
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new UserException(UserErrorCode.INVALID_PASSWORD);
+        }
+
+        // 토큰 생성하기
+        String fullToken = jwtUtil.createToken(
+            user.getId(),
+            user.getEmail(),
+            user.getNickname(),
+            user.getRole()
+        );
+
+        // 토큰 접두사 제거
+        String accessToken = jwtUtil.substringToken(fullToken);
+
+        return new LoginResponse(accessToken);
+    }
 
     // ====================== 헬퍼메서드 ======================
     private void checkEmailExists(SignupRequest request) {
