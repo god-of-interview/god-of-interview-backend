@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capstone.godofinterview.domain.auth.dto.LoginResponse;
+import com.capstone.godofinterview.domain.auth.dto.response.LoginResponse;
 import com.capstone.godofinterview.domain.auth.dto.request.LoginRequest;
 import com.capstone.godofinterview.domain.auth.dto.request.SignupRequest;
 import com.capstone.godofinterview.domain.auth.dto.response.SignupResponse;
