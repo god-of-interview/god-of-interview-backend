@@ -38,7 +38,10 @@ public class JwtFilter extends OncePerRequestFilter {
         String url = httpRequest.getRequestURI();
 
         // auth api로 들어오면 그냥 통과
-        if (url.startsWith("/auth")) {
+        if (url.startsWith("/auth") ||
+            url.startsWith("/swagger-ui") ||
+            url.startsWith("/v3/api-docs") ||
+            url.equals("/swagger-ui.html")) {
             filterChain.doFilter(httpRequest, httpResponse);
             return;
         }
