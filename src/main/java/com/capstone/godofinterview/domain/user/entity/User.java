@@ -13,9 +13,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Table(name = "user")
 public class User extends BaseEntity {
 
@@ -43,4 +45,14 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDate birth; // 생년월일
+
+    public User(String nickname, String email, String password, String gender, Role role, String bio, LocalDate birth) {
+        this.nickname = nickname;
+        this.email = email;
+        this.password = password;
+        this.gender = gender;
+        this.role = role;
+        this.bio = bio;
+        this.birth = birth;
+    }
 }

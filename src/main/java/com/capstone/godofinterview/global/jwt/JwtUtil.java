@@ -50,11 +50,12 @@ public class JwtUtil {
                         .compact();
     }
 
-    public String substringToken(String tokenValue) throws ServerException {
+    public String substringToken(String tokenValue) {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
-        throw new ServerException("Not Found Token");
+
+        return null;
     }
 
     public Claims extractClaims(String token) {
