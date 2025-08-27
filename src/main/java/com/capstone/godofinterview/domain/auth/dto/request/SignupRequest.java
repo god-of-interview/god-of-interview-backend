@@ -1,4 +1,4 @@
-package com.capstone.godofinterview.domain.auth.dto;
+package com.capstone.godofinterview.domain.auth.dto.request;
 
 import java.time.LocalDate;
 

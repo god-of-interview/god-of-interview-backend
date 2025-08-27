@@ -1,4 +1,4 @@
-package com.capstone.godofinterview.domain.auth.dto;
+package com.capstone.godofinterview.domain.auth.dto.response;
 
 import lombok.AllArgsConstructor;
 
