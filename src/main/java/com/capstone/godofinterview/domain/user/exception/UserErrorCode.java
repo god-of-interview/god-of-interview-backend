@@ -15,7 +15,8 @@ public enum UserErrorCode implements ErrorCode {
     ALREADY_EXISTS_EMAIL("이미 존재하는 이메일입니다.", HttpStatus.CONFLICT),
     ALREADY_EXISTS_NICKNAME("이미 존재하는 닉네임입니다.", HttpStatus.CONFLICT),
     USER_NOT_FOUND("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND),
-    INVALID_PASSWORD("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+    INVALID_PASSWORD("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_DELETED_USER("이미 탈퇴한 유저입니다.", HttpStatus.NOT_FOUND);
 
     private final String message;
     private final HttpStatus status;
