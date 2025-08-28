@@ -2,7 +2,7 @@ package com.capstone.godofinterview.domain.user.service;
 
 import org.springframework.stereotype.Service;
 
-import com.capstone.godofinterview.domain.user.dto.response.ProfileResponse;
+import com.capstone.godofinterview.domain.user.dto.response.UserResponse;
 import com.capstone.godofinterview.domain.user.entity.User;
 import com.capstone.godofinterview.domain.user.exception.UserErrorCode;
 import com.capstone.godofinterview.domain.user.exception.UserException;
@@ -17,11 +17,11 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
 
     @Override
-    public ProfileResponse getMyProfile(Long userId) {
+    public UserResponse getProfile(Long userId) {
 
         User user = getUser(userId);
 
-        return new ProfileResponse(
+        return new UserResponse(
             user.getId(),
             user.getNickname(),
             user.getGender(),
@@ -32,7 +32,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUser(Long userId) {
-        return userRepository.findById(userId)
+
+        User user = userRepository.findById(userId)
             .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        // 탈퇴한 유저인지 판단
+        if (user.getDeletedAt() != null) {
+            throw new UserException(UserErrorCode.ALREADY_DELETED_USER);
+        }
+
+        return user;
     }
 }

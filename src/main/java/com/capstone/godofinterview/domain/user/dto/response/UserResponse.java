@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class ProfileResponse {
+public class UserResponse {
 
     private Long id;
     private String nickname;
