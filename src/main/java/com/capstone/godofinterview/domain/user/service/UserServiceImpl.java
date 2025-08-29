@@ -1,6 +1,7 @@
 package com.capstone.godofinterview.domain.user.service;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     @Override
@@ -67,5 +69,18 @@ public class UserServiceImpl implements UserService{
         }
 
         user.updateProfile(request);
+    }
+
+    @Transactional
+    @Override
+    public void deleteMyAccount(Long userId, String password) {
+
+        User user = getUser(userId);
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new UserException(UserErrorCode.INVALID_PASSWORD);
+        }
+
+        user.delete();
     }
 }

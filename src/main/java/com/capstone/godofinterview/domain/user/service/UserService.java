@@ -15,4 +15,6 @@ public interface UserService {
     PageResponse<UserResponse> searchUsers(Pageable pageable, String keyword);
 
     void updateProfile(Long userId, UpdateProfileRequest request);
+
+    void deleteMyAccount(Long userId, String password);
 }

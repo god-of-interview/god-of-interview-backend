@@ -5,7 +5,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capstone.godofinterview.domain.user.dto.request.DeleteAccountRequest;
 import com.capstone.godofinterview.domain.user.dto.request.UpdateProfileRequest;
 import com.capstone.godofinterview.domain.user.dto.response.UserResponse;
 import com.capstone.godofinterview.domain.user.service.UserService;
@@ -71,6 +74,21 @@ public class UserController {
         return ApiResponse.success(
             HttpStatus.OK,
             "회원 정보가 수정되었습니다.",
+            null
+        );
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<ApiResponse<Void>> deleteMyAccount(
+        @AuthenticationPrincipal Auth auth,
+        @RequestBody DeleteAccountRequest request
+    ) {
+
+        userService.deleteMyAccount(auth.getUserId(), request.getPassword());
+
+        return ApiResponse.success(
+            HttpStatus.OK,
+            "회원 탈퇴가 완료되었습니다.",
             null
         );
     }
