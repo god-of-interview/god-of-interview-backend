@@ -1,5 +1,6 @@
 package com.capstone.godofinterview.domain.user.service;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.capstone.godofinterview.domain.user.dto.response.UserResponse;
@@ -7,6 +8,7 @@ import com.capstone.godofinterview.domain.user.entity.User;
 import com.capstone.godofinterview.domain.user.exception.UserErrorCode;
 import com.capstone.godofinterview.domain.user.exception.UserException;
 import com.capstone.godofinterview.domain.user.repository.UserRepository;
+import com.capstone.godofinterview.global.response.PageResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,13 +23,7 @@ public class UserServiceImpl implements UserService{
 
         User user = getUser(userId);
 
-        return new UserResponse(
-            user.getId(),
-            user.getNickname(),
-            user.getGender(),
-            user.getBio(),
-            user.getBirth()
-        );
+        return UserResponse.toDto(user);
     }
 
     @Override
@@ -42,5 +38,13 @@ public class UserServiceImpl implements UserService{
         }
 
         return user;
+    }
+
+    @Override
+    public PageResponse<UserResponse> searchUsers(Pageable pageable, String keyword) {
+        return new PageResponse<>(
+            userRepository.searchUsers(pageable, keyword)
+                .map(UserResponse::toDto)
+        );
     }
 }
