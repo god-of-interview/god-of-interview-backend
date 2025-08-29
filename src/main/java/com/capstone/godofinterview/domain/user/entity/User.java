@@ -2,6 +2,7 @@ package com.capstone.godofinterview.domain.user.entity;
 
 import java.time.LocalDate;
 
+import com.capstone.godofinterview.domain.user.dto.request.UpdateProfileRequest;
 import com.capstone.godofinterview.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -54,5 +55,15 @@ public class User extends BaseEntity {
         this.role = role;
         this.bio = bio;
         this.birth = birth;
+    }
+
+    public void updateProfile(UpdateProfileRequest request) {
+        if (request.getNickname() != null && !request.getNickname().trim().isEmpty()) {
+            this.nickname = request.getNickname();
+        }
+
+        if (request.getBio() != null) {
+            this.bio = request.getBio();
+        }
     }
 }
