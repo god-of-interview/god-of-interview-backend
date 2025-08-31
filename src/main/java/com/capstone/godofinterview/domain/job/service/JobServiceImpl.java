@@ -1,11 +1,16 @@
 package com.capstone.godofinterview.domain.job.service;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.capstone.godofinterview.domain.job.dto.request.CreateJobRequest;
+import com.capstone.godofinterview.domain.job.dto.response.JobCategoryResponse;
 import com.capstone.godofinterview.domain.job.dto.response.JobResponse;
 import com.capstone.godofinterview.domain.job.entity.Job;
+import com.capstone.godofinterview.domain.job.entity.JobCategory;
 import com.capstone.godofinterview.domain.job.exception.JobErrorCode;
 import com.capstone.godofinterview.domain.job.exception.JobException;
 import com.capstone.godofinterview.domain.job.repository.JobRepository;
@@ -35,5 +40,19 @@ public class JobServiceImpl implements JobService {
         );
 
         return JobResponse.toDto(savedJob);
+    }
+
+    @Override
+    public List<JobCategoryResponse> getAllCategories() {
+        return Arrays.stream(JobCategory.values())
+            .map(JobCategoryResponse::toDto)
+            .toList();
+    }
+
+    @Override
+    public List<JobResponse> getJobsByCategory(JobCategory jobCategory) {
+        return jobRepository.findJobsByCategory(jobCategory).stream()
+            .map(JobResponse::toDto)
+            .toList();
     }
 }
