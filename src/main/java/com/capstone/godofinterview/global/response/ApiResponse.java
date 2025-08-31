@@ -32,4 +32,8 @@ public class ApiResponse<T> {
     public static <T> ResponseEntity<ApiResponse<T>> error(HttpStatus code, String message) {
         return ResponseEntity.status(code).body(new ApiResponse<>(message, null));
     }
+
+    public static ApiResponse<Void> securityError(String message) {
+        return new ApiResponse<>(message, null);
+    }
 }

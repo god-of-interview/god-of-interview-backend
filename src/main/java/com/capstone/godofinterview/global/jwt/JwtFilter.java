@@ -77,16 +77,6 @@ public class JwtFilter extends OncePerRequestFilter {
             httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
             httpRequest.setAttribute("userRole", claims.get("userRole"));
 
-            if (url.startsWith("/admin")) {
-                // 관리자 권한이 없는 경우 403을 반환합니다.
-                if (!Role.ADMIN.equals(userRole)) {
-                    httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "관리자 권한이 없습니다.");
-                    return;
-                }
-                filterChain.doFilter(httpRequest, httpResponse);
-                return;
-            }
-
             filterChain.doFilter(httpRequest, httpResponse);
         } catch (SecurityException | MalformedJwtException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.", e);
