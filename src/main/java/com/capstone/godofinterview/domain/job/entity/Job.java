@@ -28,5 +28,8 @@ public class Job extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
-
+    public Job(JobCategory jobCategory, String name) {
+        this.jobCategory = jobCategory;
+        this.name = name;
+    }
 }
