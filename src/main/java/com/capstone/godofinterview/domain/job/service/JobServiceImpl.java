@@ -49,10 +49,25 @@ public class JobServiceImpl implements JobService {
             .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<JobResponse> getJobsByCategory(JobCategory jobCategory) {
         return jobRepository.findJobsByCategory(jobCategory).stream()
             .map(JobResponse::toDto)
             .toList();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Job getJob(Long id) {
+
+        Job job = jobRepository.findById(id)
+            .orElseThrow(() -> new JobException(JobErrorCode.JOB_NOT_FOUNT));
+
+        if (job.getDeletedAt() != null) {
+            throw new JobException(JobErrorCode.ALREADY_DELETED_JOB);
+        }
+
+        return job;
     }
 }

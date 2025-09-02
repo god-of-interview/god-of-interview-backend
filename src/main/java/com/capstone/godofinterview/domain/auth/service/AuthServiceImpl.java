@@ -2,6 +2,7 @@ package com.capstone.godofinterview.domain.auth.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.capstone.godofinterview.domain.auth.dto.response.LoginResponse;
 import com.capstone.godofinterview.domain.auth.dto.request.LoginRequest;
@@ -24,6 +25,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    @Transactional
     @Override
     public SignupResponse signup(SignupRequest request) {
 
@@ -65,6 +67,7 @@ public class AuthServiceImpl implements AuthService {
         return new SignupResponse(accessToken);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public LoginResponse login(LoginRequest request) {
 
