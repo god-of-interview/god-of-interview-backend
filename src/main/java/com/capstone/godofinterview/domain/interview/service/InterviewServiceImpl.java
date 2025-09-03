@@ -82,4 +82,12 @@ public class InterviewServiceImpl implements InterviewService {
             videoUrl
         );
     }
+
+    @Transactional
+    @Override
+    public void completeInterview(Long interviewId) {
+        Interview interview = getInterview(interviewId);
+
+        interview.completeInterview();
+    }
 }

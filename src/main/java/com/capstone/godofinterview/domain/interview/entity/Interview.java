@@ -44,6 +44,10 @@ public class Interview extends BaseEntity {
         this.job = job;
         this.status = status;
     }
+
+    public void completeInterview() {
+        this.status = InterviewStatus.COMPLETED;
+    }
 }
 
 

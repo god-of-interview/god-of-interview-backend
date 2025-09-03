@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -48,6 +49,18 @@ public class InterviewController {
             HttpStatus.OK,
             "면접 영상 업로드가 완료되었습니다.",
             interviewService.uploadVideo(interviewId, questionNumber, video)
+        );
+    }
+
+    @PutMapping("{interviewId}/complete")
+    public ResponseEntity<ApiResponse<Void>> completeInterview(@PathVariable Long interviewId) {
+
+        interviewService.completeInterview(interviewId);
+
+        return ApiResponse.success(
+            HttpStatus.OK,
+            "면접이 완료되었습니다.",
+            null
         );
     }
 }

@@ -12,4 +12,6 @@ public interface InterviewService {
     Interview getInterview(Long interviewId);
 
     VideoUploadResponse uploadVideo(Long interviewId, int questionNumber, MultipartFile video);
+
+    void completeInterview(Long interviewId);
 }
