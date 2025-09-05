@@ -1,14 +1,19 @@
 package com.capstone.godofinterview.domain.interview.infra.s3;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ListObjectsV2Request;
+import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,6 +57,34 @@ public class S3FileUpload {
         String fileUrl = generateS3Url(s3Key);
 
         return fileUrl;
+    }
+
+    /**
+     * S3에 업로드 되어 있는 동영상 파일 5개 URL 가져오기
+     */
+    public List<String> getInterviewVideoUrls(Long interviewId) {
+        List<String> videoUrls = new ArrayList<>();
+
+        try {
+            String prefix = String.format("interview-videos/interview_%d/", interviewId);
+
+            ListObjectsV2Request listRequest = new ListObjectsV2Request()
+                .withBucketName(bucketName)
+                .withPrefix(prefix);
+
+            ListObjectsV2Result listResponse = amazonS3Client.listObjectsV2(listRequest);
+
+            for (S3ObjectSummary s3Object : listResponse.getObjectSummaries()) {
+                String objectKey = s3Object.getKey();
+                String videoUrl = generateS3Url(objectKey);
+                videoUrls.add(videoUrl);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("비디오 URL 조회 실패", e);
+        }
+
+        return videoUrls;
     }
 
     /**
