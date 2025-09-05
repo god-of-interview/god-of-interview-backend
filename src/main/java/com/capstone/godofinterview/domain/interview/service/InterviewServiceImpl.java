@@ -1,11 +1,12 @@
 package com.capstone.godofinterview.domain.interview.service;
 
-import java.io.IOException;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.capstone.godofinterview.domain.analysis.service.AnalysisService;
 import com.capstone.godofinterview.domain.interview.dto.response.InterviewStartResponse;
 import com.capstone.godofinterview.domain.interview.dto.response.VideoUploadResponse;
 import com.capstone.godofinterview.domain.interview.entity.Interview;
@@ -28,6 +29,7 @@ public class InterviewServiceImpl implements InterviewService {
     private final InterviewRepository interviewRepository;
     private final UserService userService;
     private final JobService jobService;
+    private final AnalysisService analysisService;
     private final S3FileUpload s3FileUpload;
 
 
@@ -89,5 +91,13 @@ public class InterviewServiceImpl implements InterviewService {
         Interview interview = getInterview(interviewId);
 
         interview.completeInterview();
+
+        // 면접이 완료되면 S3에 있는 동영상 URL 5개 가져오기
+        List<String> videoUrls = s3FileUpload.getInterviewVideoUrls(interviewId);
+        if (videoUrls == null || videoUrls.isEmpty()) {
+            throw new InterviewException(InterviewErrorCode.VIDEO_NOT_FOUND);
+        }
+        // 인터뷰 Id와 함께 동영상 URL 5개를 fastAPI 서버에 넘겨서 분석하기
+        analysisService.startAnalysisAsync(interviewId, videoUrls);
     }
 }

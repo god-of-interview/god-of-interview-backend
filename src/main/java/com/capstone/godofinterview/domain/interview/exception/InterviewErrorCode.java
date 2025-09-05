@@ -13,7 +13,8 @@ public enum InterviewErrorCode implements ErrorCode {
 
     INTERVIEW_NOT_FOUND("면접 기록을 찾을 수 없습니다", HttpStatus.NOT_FOUND),
     ALREADY_DELETED_INTERVIEW("이미 삭제된 면접 기록입니다.", HttpStatus.NOT_FOUND),
-    VIDEO_UPLOAD_FAILED("동영상 업로드에 실패하였습니다.", HttpStatus.BAD_REQUEST);
+    VIDEO_UPLOAD_FAILED("동영상 업로드에 실패하였습니다.", HttpStatus.BAD_REQUEST),
+    VIDEO_NOT_FOUND("동영상 URL을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
 
     private final String message;
     private final HttpStatus status;
