@@ -2,6 +2,7 @@ package com.capstone.godofinterview.domain.analysis.service;
 
 import java.util.List;
 
+import com.capstone.godofinterview.domain.analysis.dto.response.AnalysisResponse;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,9 @@ public class AnalysisServiceImpl implements AnalysisService {
         try {
             log.info("AI 분석 시작: interviewId={}, videoCount={}", interviewId, videoUrls.size());
 
-            String result = fastApiClientService.analyzeInterview(interviewId, videoUrls);
+            AnalysisResponse analysisResponse = fastApiClientService.analyzeInterview(interviewId, videoUrls);
 
+            log.info("분석 결과 = {}", analysisResponse);
             // TODO: 분석 결과를 DB에 저장
             log.info("AI 분석 완료: interviewId={}", interviewId);
 

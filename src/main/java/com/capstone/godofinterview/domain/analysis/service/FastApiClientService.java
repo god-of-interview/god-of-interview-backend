@@ -1,8 +1,9 @@
 package com.capstone.godofinterview.domain.analysis.service;
 
 import java.util.List;
-import java.util.Map;
 
+import com.capstone.godofinterview.domain.analysis.dto.request.AnalysisRequest;
+import com.capstone.godofinterview.domain.analysis.dto.response.AnalysisResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -20,18 +21,18 @@ public class FastApiClientService {
 
     private final RestClient restClient;
 
-    public String analyzeInterview(Long interviewId, List<String> videoUrls) {
+    public AnalysisResponse analyzeInterview(Long interviewId, List<String> videoUrls) {
         try {
-            Map<String, Object> request = Map.of(
-                "interview_id", interviewId,
-                "video_urls", videoUrls
+            AnalysisRequest request = new AnalysisRequest(
+                    interviewId,
+                    videoUrls
             );
 
             return restClient.post()
                 .uri("/analysis")
                 .body(request)
                 .retrieve()
-                .body(String.class);
+                .body(AnalysisResponse.class);
 
         } catch (ResourceAccessException e) {
             // 연결 타임아웃, 읽기 타임아웃 등
