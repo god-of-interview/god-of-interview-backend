@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  spring-server:
+    image: dogyunkim0903/god-of-interview:latest
+    container_name: god-of-interview-spring
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod    # 핵심! prod 프로필 사용
+    env_file:
+      - .env.prod                      # 환경변수 파일
