@@ -8,20 +8,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ListObjectsV2Request;
-import com.amazonaws.services.s3.model.ListObjectsV2Result;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
-
 import lombok.RequiredArgsConstructor;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 @Component
 @RequiredArgsConstructor
 public class S3FileUpload {
 
-    private final AmazonS3 amazonS3Client;
+    private final S3Client s3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -34,29 +33,18 @@ public class S3FileUpload {
      * S3에 비디오 파일 업로드 (동적 경로)
      */
     public String uploadToS3(Long interviewId, int questionNumber, MultipartFile file) throws IOException {
-
-        // 1. S3에 저장할 경로 동적 생성
         String s3Key = generateS3Key(interviewId, questionNumber);
 
-        // 2. 파일 정보 설정
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType("video/webm");     // 파일 타입
-        metadata.setContentLength(file.getSize()); // 파일 크기
+        PutObjectRequest putRequest = PutObjectRequest.builder()
+            .bucket(bucketName)
+            .key(s3Key)
+            .contentType("video/webm")
+            .contentLength(file.getSize())
+            .build();
 
-        // 3. 실제 S3 업로드
-        PutObjectRequest putRequest = new PutObjectRequest(
-            bucketName,             // 동적 버킷명
-            s3Key,                  // 동적 파일 경로
-            file.getInputStream(),  // 파일 데이터
-            metadata               // 파일 정보
-        );
+        s3Client.putObject(putRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-        amazonS3Client.putObject(putRequest);  // AWS S3로 전송!
-
-        // 4. 업로드된 파일의 공개 URL 동적 생성
-        String fileUrl = generateS3Url(s3Key);
-
-        return fileUrl;
+        return generateS3Url(s3Key);
     }
 
     /**
@@ -64,24 +52,17 @@ public class S3FileUpload {
      */
     public List<String> getInterviewVideoUrls(Long interviewId) {
         List<String> videoUrls = new ArrayList<>();
+        String prefix = String.format("interview-videos/interview_%d/", interviewId);
 
-        try {
-            String prefix = String.format("interview-videos/interview_%d/", interviewId);
+        ListObjectsV2Request listRequest = ListObjectsV2Request.builder()
+            .bucket(bucketName)
+            .prefix(prefix)
+            .build();
 
-            ListObjectsV2Request listRequest = new ListObjectsV2Request()
-                .withBucketName(bucketName)
-                .withPrefix(prefix);
+        ListObjectsV2Response listResponse = s3Client.listObjectsV2(listRequest);
 
-            ListObjectsV2Result listResponse = amazonS3Client.listObjectsV2(listRequest);
-
-            for (S3ObjectSummary s3Object : listResponse.getObjectSummaries()) {
-                String objectKey = s3Object.getKey();
-                String videoUrl = generateS3Url(objectKey);
-                videoUrls.add(videoUrl);
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException("비디오 URL 조회 실패", e);
+        for (S3Object s3Object : listResponse.contents()) {
+            videoUrls.add(generateS3Url(s3Object.key()));
         }
 
         return videoUrls;
