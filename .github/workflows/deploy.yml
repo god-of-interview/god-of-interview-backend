@@ -87,16 +87,6 @@ jobs:
             S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
             EOF
             
-            # Docker 설치 확인
-            if ! command -v docker &> /dev/null; then
-              echo "🐳 Docker 설치 중..."
-              sudo apt update
-              sudo apt install -y docker.io docker-compose-plugin
-              sudo systemctl start docker
-              sudo usermod -a -G docker ubuntu
-              newgrp docker
-            fi
-            
             # 기존 컨테이너 중지
             docker-compose -f docker-compose.prod.yml down || true
             
