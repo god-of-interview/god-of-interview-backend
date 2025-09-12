@@ -53,8 +53,6 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/god-of-interview:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/god-of-interview:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       # (6) docker-compose.yml 파일 전송
       - name: Copy docker-compose.yml to EC2
