@@ -1,5 +1,6 @@
 package com.capstone.godofinterview.global.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -9,10 +10,13 @@ import org.springframework.web.client.RestClient;
 @Configuration
 public class RestClientConfig {
 
+    @Value("${fastapi.base-url}")
+    private String fastApiBaseUrl;
+
     @Bean
     public RestClient fastApiRestClient() {
         return RestClient.builder()
-            .baseUrl("http://localhost:8001")
+            .baseUrl(fastApiBaseUrl)
             .requestFactory(clientHttpRequestFactory())
             .build();
     }
