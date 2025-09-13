@@ -40,3 +40,6 @@ cloud:
 
 jwt:
   secret: ${JWT_SECRET_KEY}
+
+fastapi:
+  base-url: ${FASTAPI_BASE_URL}
