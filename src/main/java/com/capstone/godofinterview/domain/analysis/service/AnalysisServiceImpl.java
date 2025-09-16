@@ -11,6 +11,7 @@ import com.capstone.godofinterview.domain.analysis.exception.AnalysisException;
 import com.capstone.godofinterview.domain.analysis.repository.InterviewAnalysisRepository;
 import com.capstone.godofinterview.domain.analysis.repository.QuestionAnalysisRepository;
 import com.capstone.godofinterview.domain.interview.entity.Interview;
+import com.capstone.godofinterview.domain.interview.repository.InterviewRepository;
 import com.capstone.godofinterview.domain.interview.service.InterviewService;
 
 import org.springframework.scheduling.annotation.Async;
@@ -26,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AnalysisServiceImpl implements AnalysisService {
 
     private final FastApiClientService fastApiClientService;
-    private final InterviewService interviewService;
+    private final InterviewRepository interviewRepository;
     private final EmotionAnalysisService emotionAnalysisService;
     private final GazeAnalysisService gazeAnalysisService;
     private final SpeechAnalysisService speechAnalysisService;
@@ -83,7 +84,8 @@ public class AnalysisServiceImpl implements AnalysisService {
                 .orElseThrow(() -> new AnalysisException(AnalysisErrorCode.ANALYSIS_NOT_FOUND));
         }
 
-        Interview interview = interviewService.getInterview(interviewId);
+        Interview interview = interviewRepository.findById(interviewId)
+            .orElseThrow(() -> new AnalysisException(AnalysisErrorCode.INTERVIEW_NOT_FOUND));
         InterviewAnalysis interviewAnalysis = InterviewAnalysis.from(interview);
 
         return interviewAnalysisRepository.save(interviewAnalysis);
