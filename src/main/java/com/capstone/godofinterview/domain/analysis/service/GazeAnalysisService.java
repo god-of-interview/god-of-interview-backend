@@ -23,6 +23,8 @@ public class GazeAnalysisService {
             questionAnalysis,
             gazeData.getCameraAttentionRatio()
         );
+
+        gazeAnalysisRepository.save(gazeAnalysis);
     }
 }
 

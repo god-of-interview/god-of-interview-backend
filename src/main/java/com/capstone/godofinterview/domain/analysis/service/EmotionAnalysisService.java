@@ -29,5 +29,7 @@ public class EmotionAnalysisService {
             emotions.getSurprise(),
             emotions.getNeutral()
         );
+
+        emotionAnalysisRepository.save(emotionAnalysis);
     }
 }
