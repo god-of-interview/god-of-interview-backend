@@ -2,8 +2,6 @@ package com.capstone.godofinterview.domain.question.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,11 +22,11 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<QuestionResponse> getRandomQuestions(Long jobId, int count) {
+    public List<QuestionResponse> getRandomQuestions(Long jobId) {
 
         jobService.getJob(jobId);
 
-        return questionRepository.findRandomQuestionsByJobId(jobId, count).stream()
+        return questionRepository.findRandomQuestionsByJobId(jobId).stream()
             .map(QuestionResponse::toDto)
             .toList();
     }

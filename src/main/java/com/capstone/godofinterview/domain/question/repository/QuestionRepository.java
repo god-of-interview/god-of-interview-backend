@@ -15,10 +15,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
         WHERE job_id = :jobId 
         AND deleted_at IS NULL 
         ORDER BY RAND() 
-        LIMIT :limit
+        LIMIT 5
         """, nativeQuery = true)
-    List<Question> findRandomQuestionsByJobId(
-        @Param("jobId") Long jobId,
-        @Param("limit") int limit
-    );
+    List<Question> findRandomQuestionsByJobId(@Param("jobId") Long jobId);
 }

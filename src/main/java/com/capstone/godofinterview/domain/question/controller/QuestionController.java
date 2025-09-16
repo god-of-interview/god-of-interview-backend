@@ -23,14 +23,11 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping("/random")
-    public ResponseEntity<ApiResponse<List<QuestionResponse>>> getRandomQuestions(
-        @RequestParam Long jobId,
-        @RequestParam(defaultValue = "5") int count
-    ) {
+    public ResponseEntity<ApiResponse<List<QuestionResponse>>> getRandomQuestions(@RequestParam Long jobId) {
         return ApiResponse.success(
             HttpStatus.OK,
             "면접 질문 조회가 완료되었습니다.",
-            questionService.getRandomQuestions(jobId, count)
+            questionService.getRandomQuestions(jobId)
         );
     }
 }
