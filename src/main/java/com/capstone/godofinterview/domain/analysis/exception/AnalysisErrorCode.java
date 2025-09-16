@@ -12,7 +12,8 @@ import lombok.RequiredArgsConstructor;
 public enum AnalysisErrorCode implements ErrorCode {
 
     FASTAPI_CONNECTION_FAILED("FastAPI 서버 연결에 실패했습니다.", HttpStatus.SERVICE_UNAVAILABLE),
-    ANALYSIS_PROCESSING_FAILED("AI 분석 처리 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+    ANALYSIS_PROCESSING_FAILED("AI 분석 처리 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    ANALYSIS_NOT_FOUND("분석 결과를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
 
     private final String message;
     private final HttpStatus status;

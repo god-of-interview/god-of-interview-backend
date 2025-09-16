@@ -9,4 +9,6 @@ import com.capstone.godofinterview.domain.analysis.entity.InterviewAnalysis;
 public interface InterviewAnalysisRepository extends JpaRepository<InterviewAnalysis, Long> {
 
     Optional<InterviewAnalysis> findByInterviewId(Long interviewId);
+
+    boolean existsByInterviewId(Long interviewId);
 }

@@ -48,6 +48,10 @@ public class Interview extends BaseEntity {
     public void completeInterview() {
         this.status = InterviewStatus.COMPLETED;
     }
+
+    public void markAsAnalyzed() {
+        this.status = InterviewStatus.ANALYZED;
+    }
 }
 
 
