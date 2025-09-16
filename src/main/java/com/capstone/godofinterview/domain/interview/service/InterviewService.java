@@ -1,10 +1,13 @@
 package com.capstone.godofinterview.domain.interview.service;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.capstone.godofinterview.domain.interview.dto.response.InterviewRecordResponse;
 import com.capstone.godofinterview.domain.interview.dto.response.InterviewStartResponse;
 import com.capstone.godofinterview.domain.interview.dto.response.VideoUploadResponse;
 import com.capstone.godofinterview.domain.interview.entity.Interview;
+import com.capstone.godofinterview.global.response.PageResponse;
 
 public interface InterviewService {
     InterviewStartResponse startInterview(Long userId, Long jobId);
@@ -14,4 +17,6 @@ public interface InterviewService {
     VideoUploadResponse uploadVideo(Long interviewId, int questionNumber, MultipartFile video);
 
     void completeInterview(Long interviewId);
+
+    PageResponse<InterviewRecordResponse> getMyInterviewRecords(Long userId, Pageable pageable);
 }
