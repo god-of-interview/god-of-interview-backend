@@ -2,6 +2,7 @@ package com.capstone.godofinterview.domain.analysis.entity;
 
 import com.capstone.godofinterview.global.entity.BaseEntity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -25,13 +26,18 @@ public class SpeechAnalysis extends BaseEntity {
     @JoinColumn(name = "question_analysis_id", nullable = false)
     private QuestionAnalysis questionAnalysis;
 
-    private SpeechAnalysis(QuestionAnalysis questionAnalysis) {
+    @Column(nullable = false)
+    private Integer totalFillerWords;
+
+    private SpeechAnalysis(QuestionAnalysis questionAnalysis, Integer totalFillerWords) {
         this.questionAnalysis = questionAnalysis;
+        this.totalFillerWords = totalFillerWords;
     }
 
-    public static SpeechAnalysis from(QuestionAnalysis questionAnalysis) {
+    public static SpeechAnalysis of(QuestionAnalysis questionAnalysis, Integer totalFillerWords) {
         return new SpeechAnalysis(
-            questionAnalysis
+            questionAnalysis,
+            totalFillerWords
         );
     }
 }
