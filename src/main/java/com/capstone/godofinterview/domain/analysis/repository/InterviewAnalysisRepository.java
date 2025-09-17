@@ -15,13 +15,12 @@ public interface InterviewAnalysisRepository extends JpaRepository<InterviewAnal
     boolean existsByInterviewId(Long interviewId);
 
     @Query("""
-        SELECT DISTINCT ia FROM InterviewAnalysis ia
-        JOIN FETCH ia.questionAnalyses qa
-        LEFT JOIN FETCH qa.emotionAnalysis
-        LEFT JOIN FETCH qa.gazeAnalysis
-        LEFT JOIN FETCH qa.speechAnalysis sa
-        LEFT JOIN FETCH sa.fillerWordCounts 
-        WHERE ia.interview.id = :interviewId
+        SELECT DISTINCT ia FROM InterviewAnalysis ia 
+        JOIN FETCH ia.questionAnalyses qa 
+        LEFT JOIN FETCH qa.emotionAnalysis 
+        LEFT JOIN FETCH qa.gazeAnalysis 
+        LEFT JOIN FETCH qa.speechAnalysis 
+        WHERE ia.interview.id = :interviewId 
         ORDER BY qa.questionNumber ASC
         """)
     Optional<InterviewAnalysis> findByInterviewIdWithAllAnalysis(@Param("interviewId") Long interviewId);
