@@ -24,9 +24,9 @@ server:
 
 logging:
   level:
-    com.capstone.godofinterview: INFO
-    org.springframework: WARN
-    org.hibernate: WARN
+    com.capstone.godofinterview: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
 
 cloud:
   aws:
