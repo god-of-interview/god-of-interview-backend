@@ -2,11 +2,13 @@ package com.capstone.godofinterview.domain.interview.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.capstone.godofinterview.domain.analysis.service.AnalysisService;
+import com.capstone.godofinterview.domain.interview.dto.response.InterviewRecordResponse;
 import com.capstone.godofinterview.domain.interview.dto.response.InterviewStartResponse;
 import com.capstone.godofinterview.domain.interview.dto.response.VideoUploadResponse;
 import com.capstone.godofinterview.domain.interview.entity.Interview;
@@ -19,6 +21,7 @@ import com.capstone.godofinterview.domain.job.entity.Job;
 import com.capstone.godofinterview.domain.job.service.JobService;
 import com.capstone.godofinterview.domain.user.entity.User;
 import com.capstone.godofinterview.domain.user.service.UserService;
+import com.capstone.godofinterview.global.response.PageResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -99,5 +102,14 @@ public class InterviewServiceImpl implements InterviewService {
         }
         // 인터뷰 Id와 함께 동영상 URL 5개를 fastAPI 서버에 넘겨서 분석하기
         analysisService.startAnalysisAsync(interviewId, videoUrls);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PageResponse<InterviewRecordResponse> getMyInterviewRecords(Long userId, Pageable pageable) {
+        return new PageResponse<>(
+            interviewRepository.findByUserIdAndStatusOrderByCreatedAtDesc(userId, InterviewStatus.ANALYZED, pageable)
+                .map(InterviewRecordResponse::from)
+        );
     }
 }

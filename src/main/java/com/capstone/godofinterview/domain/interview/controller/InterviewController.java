@@ -1,8 +1,11 @@
 package com.capstone.godofinterview.domain.interview.controller;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.capstone.godofinterview.domain.interview.dto.response.InterviewRecordResponse;
 import com.capstone.godofinterview.domain.interview.dto.response.InterviewStartResponse;
 import com.capstone.godofinterview.domain.interview.dto.response.VideoUploadResponse;
 import com.capstone.godofinterview.domain.interview.service.InterviewService;
 import com.capstone.godofinterview.global.jwt.Auth;
 import com.capstone.godofinterview.global.response.ApiResponse;
+import com.capstone.godofinterview.global.response.PageResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -61,6 +66,18 @@ public class InterviewController {
             HttpStatus.OK,
             "면접이 완료되었습니다.",
             null
+        );
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<PageResponse<InterviewRecordResponse>>> getMyInterviewRecords(
+        @AuthenticationPrincipal Auth auth,
+        @PageableDefault(size = 10) Pageable pageable
+    ) {
+        return ApiResponse.success(
+            HttpStatus.OK,
+            "면접 기록 조회가 완료되었습니다.",
+            interviewService.getMyInterviewRecords(auth.getUserId(), pageable)
         );
     }
 }
