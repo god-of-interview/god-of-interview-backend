@@ -9,12 +9,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Job extends BaseEntity {
 
     @Id
@@ -28,8 +29,15 @@ public class Job extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    public Job(JobCategory jobCategory, String name) {
+    private Job(JobCategory jobCategory, String name) {
         this.jobCategory = jobCategory;
         this.name = name;
+    }
+
+    public static Job create(JobCategory jobCategory, String name) {
+        return new Job(
+            jobCategory,
+            name
+        );
     }
 }

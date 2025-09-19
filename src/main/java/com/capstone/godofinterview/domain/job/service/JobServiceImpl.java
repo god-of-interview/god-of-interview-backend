@@ -33,7 +33,7 @@ public class JobServiceImpl implements JobService {
         }
 
         Job savedJob = jobRepository.save(
-            new Job(
+            Job.create(
                 request.getJobCategory(),
                 request.getName()
             )
