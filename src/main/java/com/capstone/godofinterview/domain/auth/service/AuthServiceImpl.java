@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
         // 유저 객체 생성
-        User user = new User(
+        User user = User.create(
             request.getNickname(),
             request.getEmail(),
             encodedPassword,
