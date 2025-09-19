@@ -109,7 +109,6 @@ public class InterviewServiceImpl implements InterviewService {
     public PageResponse<InterviewRecordResponse> getMyInterviewRecords(Long userId, Pageable pageable) {
         return new PageResponse<>(
             interviewRepository.findByUserIdAndStatusOrderByCreatedAtDesc(userId, InterviewStatus.ANALYZED, pageable)
-                .map(InterviewRecordResponse::from)
         );
     }
 }
