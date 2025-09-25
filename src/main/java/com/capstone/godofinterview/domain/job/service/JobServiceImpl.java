@@ -33,7 +33,7 @@ public class JobServiceImpl implements JobService {
         }
 
         Job savedJob = jobRepository.save(
-            new Job(
+            Job.create(
                 request.getJobCategory(),
                 request.getName()
             )
@@ -52,9 +52,7 @@ public class JobServiceImpl implements JobService {
     @Transactional(readOnly = true)
     @Override
     public List<JobResponse> getJobsByCategory(JobCategory jobCategory) {
-        return jobRepository.findJobsByCategory(jobCategory).stream()
-            .map(JobResponse::toDto)
-            .toList();
+        return jobRepository.findJobsByCategory(jobCategory);
     }
 
     @Transactional(readOnly = true)

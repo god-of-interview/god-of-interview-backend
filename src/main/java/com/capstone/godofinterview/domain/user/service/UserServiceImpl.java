@@ -49,10 +49,7 @@ public class UserServiceImpl implements UserService{
     @Transactional(readOnly = true)
     @Override
     public PageResponse<UserResponse> searchUsers(Pageable pageable, String keyword) {
-        return new PageResponse<>(
-            userRepository.searchUsers(pageable, keyword)
-                .map(UserResponse::toDto)
-        );
+        return new PageResponse<>(userRepository.searchUsers(pageable, keyword));
     }
 
     @Transactional

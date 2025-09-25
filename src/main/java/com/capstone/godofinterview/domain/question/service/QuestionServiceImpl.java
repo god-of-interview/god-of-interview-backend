@@ -26,9 +26,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         jobService.getJob(jobId);
 
-        return questionRepository.findRandomQuestionsByJobId(jobId).stream()
-            .map(QuestionResponse::toDto)
-            .toList();
+        return questionRepository.findRandomQuestionsByJobId(jobId);
     }
 
     @Transactional
