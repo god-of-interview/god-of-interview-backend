@@ -6,6 +6,8 @@ import com.capstone.godofinterview.domain.question.dto.response.QuestionResponse
 
 public interface QuestionService {
 
+    List<QuestionResponse> getRandomQuestion(Long jobId);
+
     List<QuestionResponse> getRandomQuestions(Long jobId);
 
     QuestionResponse createQuestion(Long jobId, String content);

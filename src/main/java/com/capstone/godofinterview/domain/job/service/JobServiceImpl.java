@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class JobServiceImpl implements JobService {
 
     private final JobRepository jobRepository;
+    private final JobCacheService cacheService;
 
     @Transactional
     @Override
@@ -38,6 +39,9 @@ public class JobServiceImpl implements JobService {
                 request.getName()
             )
         );
+
+        // 캐시 무효화
+        cacheService.evictCache(savedJob.getId());
 
         return JobResponse.toDto(savedJob);
     }
@@ -58,14 +62,6 @@ public class JobServiceImpl implements JobService {
     @Transactional(readOnly = true)
     @Override
     public Job getJob(Long id) {
-
-        Job job = jobRepository.findById(id)
-            .orElseThrow(() -> new JobException(JobErrorCode.JOB_NOT_FOUNT));
-
-        if (job.getDeletedAt() != null) {
-            throw new JobException(JobErrorCode.ALREADY_DELETED_JOB);
-        }
-
-        return job;
+        return cacheService.getJob(id);
     }
 }

@@ -36,6 +36,20 @@ public class QuestionRepositoryCustomImpl implements QuestionRepositoryCustom {
             .fetch();
     }
 
+    @Override
+    public List<QuestionResponse> findAllByJobIdAndDeletedAtIsNull(Long jobId) {
+        return queryFactory
+            .select(Projections.constructor(QuestionResponse.class,
+                question.id,
+                question.content))
+            .from(question)
+            .where(
+                jobIdEq(jobId),
+                isNotDeleted()
+            )
+            .fetch();
+    }
+
     private BooleanExpression jobIdEq(Long jobId) {
         return question.job.id.eq(jobId);
     }
